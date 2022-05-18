@@ -55,7 +55,7 @@
             "description": "Subject not found"
 
           },
-            "5XX": {
+          "5XX": {
             "description": "Various server side errors."
           }
         }
@@ -68,7 +68,7 @@
         ],
         "summary": "token",
         "operationId": "tokenUsingPOST",
-        "security": ["intitiatingToken"],
+        "security": [ "intitiatingToken" ],
         "parameters": [
           {
             "name": "authorization",
@@ -94,28 +94,28 @@
             "description": "OK",
             "headers": {
               "x-enc": {
-              "schema": {
-                "type": "string",
-                "description": "Base 64 of encryption key (RSA public key) for DCC encryption scheme."
+                "schema": {
+                  "type": "string",
+                  "description": "Base 64 of encryption key (RSA public key) for DCC encryption scheme."
                 }
               },
               "x-nonce": {
-              "schema": {
-                "type": "string",
-                "description": "Base 64 of nonce - random byte array, length 16 - ultimately used as an encryption parameter in the DCC encryption scheme."
+                "schema": {
+                  "type": "string",
+                  "description": "Base 64 of nonce - random byte array, length 16 - ultimately used as an encryption parameter in the DCC encryption scheme."
                 }
               },
               "x-sig": {
-              "schema": {
-                "type": "string",
-                "description": "Base 64 of verification key (RSA public key) for DCC encryption scheme."
+                "schema": {
+                  "type": "string",
+                  "description": "Base 64 of verification key (RSA public key) for DCC encryption scheme."
                 }
               }
             },
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string", 
+                  "type": "string",
                   "description": "Validation access token as JWT."
                 }
               }
@@ -130,43 +130,20 @@
         }
       }
     },
-    "/identity": {
-      "get": {
-        "tags": [
-          "identity-controller"
-        ],
-        "summary": "WholeDoc",
-        "security": [],
-        "operationId": "WholeDocUsingGET",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "TODO"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "securitySchemes": {
-      "intitiatingToken": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+    "components": {
+      "securitySchemes": {
+        "intitiatingToken": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
         }
       },
       "confirmation": {
         "type": "http",
         "scheme": "bearer",
-        "bearerFormat": "JWT",
-        }
-      },
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "CallbackRequestBody": {
         "title": "CallbackRequestBody",
@@ -177,7 +154,7 @@
         "properties": {
           "confirmationToken": {
             "type": "string",
-            "description" : "JWT containing ConfirmationTokenPayload."
+            "description": "JWT containing ConfirmationTokenPayload."
           }
         }
       },
