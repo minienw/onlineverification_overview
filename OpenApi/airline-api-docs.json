@@ -1,0 +1,318 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Airline Stub",
+    "description": "Airline component of Travel Validation System.",
+    "version": "2.0",
+    "license": {
+      "name": "EUPL 1.2",
+      "url": "https://spdx.org/licenses/EUPL-1.2.html"
+    }
+  },
+  "tags": [
+    {
+      "name": "decorator-controller",
+      "description": "Decorator Controller"
+    },
+    {
+      "name": "identity-controller",
+      "description": "Identity Controller"
+    }
+  ],
+  "paths": {
+    "/callback": {
+      "post": {
+        "tags": [
+          "decorator-controller"
+        ],
+        "summary": "validationResultCallback",
+        "operationId": "validationResultCallbackUsingPOST",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CallbackRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Subject not found"
+
+          },
+            "5XX": {
+            "description": "Various server side errors."
+          }
+        }
+      }
+    },
+    "/token": {
+      "post": {
+        "tags": [
+          "decorator-controller"
+        ],
+        "summary": "token",
+        "operationId": "tokenUsingPOST",
+        "security": ["intitiatingToken"],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "x-enc": {
+              "schema": {
+                "type": "string",
+                "description": "Base 64 of encryption key (RSA public key) for DCC encryption scheme."
+                }
+              },
+              "x-nonce": {
+              "schema": {
+                "type": "string",
+                "description": "Base 64 of nonce - random byte array, length 16 - ultimately used as an encryption parameter in the DCC encryption scheme."
+                }
+              },
+              "x-sig": {
+              "schema": {
+                "type": "string",
+                "description": "Base 64 of verification key (RSA public key) for DCC encryption scheme."
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string", 
+                  "description": "Validation access token as JWT."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "5XX": {
+            "description": "Various server side errors."
+          }
+        }
+      }
+    },
+    "/identity": {
+      "get": {
+        "tags": [
+          "identity-controller"
+        ],
+        "summary": "WholeDoc",
+        "security": [],
+        "operationId": "WholeDocUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "TODO"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "intitiatingToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+        }
+      },
+      "confirmation": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        }
+      },
+    "schemas": {
+      "CallbackRequestBody": {
+        "title": "CallbackRequestBody",
+        "required": [
+          "confirmationToken"
+        ],
+        "type": "object",
+        "properties": {
+          "confirmationToken": {
+            "type": "string",
+            "description" : "JWT containing ConfirmationTokenPayload."
+          }
+        }
+      },
+      "ConfirmationTokenPayload": {
+        "title": "ConfirmationTokenPayload",
+        "required": [
+          "category",
+          "exp",
+          "iat",
+          "jti",
+          "personalinfodccextract",
+          "poa",
+          "pod",
+          "result",
+          "sub",
+          "validTo",
+          "validationclock",
+          "validfrom"
+        ],
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exp": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "iat": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "jti": {
+            "type": "string"
+          },
+          "personalinfodccextract": {
+            "$ref": "#/components/schemas/DccExtract"
+          },
+          "poa": {
+            "type": "string"
+          },
+          "pod": {
+            "type": "string"
+          },
+          "result": {
+            "type": "string"
+          },
+          "sub": {
+            "type": "string"
+          },
+          "validTo": {
+            "type": "string"
+          },
+          "validationclock": {
+            "type": "string"
+          },
+          "validfrom": {
+            "type": "string"
+          }
+        }
+      },
+      "DccExtract": {
+        "title": "DccExtract",
+        "type": "object",
+        "properties": {
+          "dob": {
+            "type": "string"
+          },
+          "fnt": {
+            "type": "string"
+          },
+          "gnt": {
+            "type": "string"
+          }
+        }
+      },
+      "InitiatingQrPayload": {
+        "title": "InitiatingQrPayload",
+        "required": [
+          "consent",
+          "privacyUrl",
+          "protocol",
+          "protocolVersion",
+          "serviceIdentity",
+          "serviceProvider",
+          "subject",
+          "token"
+        ],
+        "type": "object",
+        "properties": {
+          "consent": {
+            "type": "string"
+          },
+          "privacyUrl": {
+            "type": "string"
+          },
+          "protocol": {
+            "type": "string"
+          },
+          "protocolVersion": {
+            "type": "string"
+          },
+          "serviceIdentity": {
+            "type": "string"
+          },
+          "serviceProvider": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "TokenRequestBody": {
+        "title": "TokenRequestBody",
+        "required": [
+          "alg",
+          "pubKey"
+        ],
+        "type": "object",
+        "properties": {
+          "alg": {
+            "type": "string"
+          },
+          "pubKey": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
