@@ -43,13 +43,17 @@
         "tags" : [ "decorator-controller" ],
         "summary" : "validationResultCallback",
         "operationId" : "validationResultCallbackUsingPOST",
-        "security" : [ ],
+        "security" : [ {
+          "initiatingToken" : [ ]
+        } ],
         "parameters" : [ {
-          "in" : "header",
           "name" : "x-version",
-          "description" : "Always 2.0",
+          "in" : "header",
+          "required" : true,
+          "allowReserved" : false,
           "schema" : {
-            "type" : "string"
+            "type" : "string",
+            "enum" : [ "2.00" ]
           }
         } ],
         "requestBody" : {
@@ -87,11 +91,13 @@
           "initiatingToken" : [ ]
         } ],
         "parameters" : [ {
-          "in" : "header",
           "name" : "x-version",
-          "description" : "Always 2.0",
+          "in" : "header",
+          "required" : true,
+          "allowReserved" : false,
           "schema" : {
-            "type" : "string"
+            "type" : "string",
+            "enum" : [ "2.00" ]
           }
         } ],
         "requestBody" : {
@@ -110,7 +116,7 @@
               "x-enc" : {
                 "schema" : {
                   "type" : "string",
-                  "description" : "Base 64 of encryption key (RSA public key) for DCC encryption scheme."
+                  "description" : "Base 64 of UTF8 of JSON of JWK ('#/components/schemas/Jwk') of encryption key (RSA public key) for DCC encryption scheme."
                 }
               },
               "x-nonce" : {
@@ -122,7 +128,7 @@
               "x-sig" : {
                 "schema" : {
                   "type" : "string",
-                  "description" : "Base 64 of verification key (RSA public key) for DCC encryption scheme."
+                  "description" : "Base 64 of UTF8 of JSON of JWK ('#/components/schemas/Jwk') of verification key (RSA public key) for DCC encryption scheme."
                 }
               }
             },

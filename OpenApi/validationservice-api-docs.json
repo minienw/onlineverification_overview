@@ -80,7 +80,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "type" : "object"
+                  "$ref" : "#/components/schemas/ValidationInitializeResponseBody"
                 }
               }
             }
@@ -121,7 +121,8 @@
           "required" : true,
           "style" : "simple",
           "schema" : {
-            "type" : "string"
+            "type" : "string",
+            "example" : "dsfsdf"
           }
         } ],
         "requestBody" : {
@@ -461,24 +462,7 @@
                   "type" : "string"
                 },
                 "publicKeyJwk" : {
-                  "type" : "object",
-                  "properties" : {
-                    "x5c" : {
-                      "type" : "array",
-                      "items" : {
-                        "type" : "string"
-                      }
-                    },
-                    "kid" : {
-                      "type" : "string"
-                    },
-                    "alg" : {
-                      "type" : "string"
-                    },
-                    "use" : {
-                      "type" : "string"
-                    }
-                  }
+                  "$ref" : "#/components/schemas/Jwk"
                 }
               }
             }
@@ -499,6 +483,47 @@
                 }
               }
             }
+          }
+        }
+      },
+      "Jwk" : {
+        "type" : "object",
+        "properties" : {
+          "x5c" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "kid" : {
+            "type" : "string"
+          },
+          "alg" : {
+            "type" : "string"
+          },
+          "use" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ValidationInitializeResponseBody" : {
+        "title" : "ValidationInitializeResponse",
+        "type" : "object",
+        "properties" : {
+          "sub" : {
+            "type" : "string"
+          },
+          "exp" : {
+            "type" : "string"
+          },
+          "aud" : {
+            "type" : "string"
+          },
+          "encKey" : {
+            "$ref" : "#/components/schemas/Jwk"
+          },
+          "signKey" : {
+            "$ref" : "#/components/schemas/Jwk"
           }
         }
       }
