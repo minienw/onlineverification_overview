@@ -3,18 +3,27 @@
 This repo describes the Online Verification for Travellers system which consits of 3 co-operating components. 
 
 * Validation Service - https://github.com/minienw/onlineverification_code
-* Wallet - https://github.com/minienw/HTMLwallet2.git
+* Wallet - https://github.com/minienw/onlineverification_wallet
 * Airline Stub - https://github.com/minienw/airlinestub
 
 In theory, each component can be hosted by seperate parties.
 
 The airline stub is purely for testing and demonstration purposes.
 
-# Docker image repository..
+The following are dependencies of the Validation Service:
 
-Currently at docker.io/stevekellaway. Migrating to Github.
+* DCC Signature Verifier - https://github.com/minienw/onlineverification_dcc_verifier
+* DCC Artifact Parser - https://github.com/minienw/onlineverification_dcc_artifact_parser
 
-Use the latest_noconfig-tagged images as the base. See individual repos for building fully configured images.
+# Docker image repository
+
+Images can be found at https://github.com/orgs/minienw/packages.
+
+Both ghcr.io/minienw/verifier:latest and ghcr.io/minienw/dccparser:latest can be used 'as-is' as part of a docker-compose or kubernetes deployment.
+
+The Wallet can also be deployed 'as-is' in a standalone manner (image TBD!).
+
+For the Validation Service and the Airline Stub, use the images tagged 'latest_noconfig' as the base and locally build configured images to deploy in your environment.
 
 # Deployment scenarios
 
@@ -22,26 +31,16 @@ See the configuration overview document.
 
 The services are dependent on each other. Various URIs dependent on where each component is hosted are used to configure other dependent components. The simplest order (in order of configuration dependencies) to install the components in is:
 
-1. Wallet
-2. Airline Stub
-3. Validation Service
+1. Airline Stub
+2. Validation Service
+3. Wallet
 
-## Docker
-
-//TODO
-
-Suitable for development and testing purposes.
-
-See docker compose scripts in each repository.
+Multiple Airline Stubs can be deployed to simulate multiple airlines cooperating with the Validation Service and Wallet.
 
 # Kubernetes on Azure
 
-//TODO
+Both Validation Service and Airline Stub repos contain scripts for deploying in a Kubernetes cluster. These 2 services use multiple docker images
 
-Deploy each component as a seperate Kubernetes cluster.
+(TBD! addition of DCC Artifact Parser to the Validation Service)
 
-Build the cluster using the scripts in the folder 'azurekubernetes'
-
-Build configured images as described in each repo.
-
-Deploy the images to the cluster...
+Build the cluster using the scripts in the folder 'azurekubernetes', build images configured to operate in the kubernetes environment as described in each repo, then deploy the images to the cluster in the usual way.
