@@ -1,5 +1,7 @@
 # Guides and Specifications for Online Verification for Travellers
 
+The original overview document can be found at https://docs.google.com/document/d/1BW-Bn9nf0mtCa8p36nbxt3GYuhy6xuBaG8lIDxi-aNs.
+
 This repo describes the Online Verification for Travellers system which consits of 3 co-operating components. 
 
 * Validation Service - https://github.com/minienw/onlineverification_code
@@ -15,9 +17,13 @@ The following are dependencies of the Validation Service:
 * DCC Signature Verifier - https://github.com/minienw/onlineverification_dcc_verifier
 * DCC Artifact Parser - https://github.com/minienw/onlineverification_dcc_artifact_parser
 
+The busines rules engine (TODO replace binary file dependency with new Maven Repo package dependency) used by the Validation Service is hosted here:
+
+* DCC Business Rules Engine - https://github.com/ehn-dcc-development/eu-dcc-business-rules
+
 # Docker image repository
 
-Images can be found at https://github.com/orgs/minienw/packages.
+Images can be found at https://github.com/orgs/minienw/packages which has the uri prefix ghcr.io/minienw/.
 
 Both ghcr.io/minienw/verifier:latest and ghcr.io/minienw/dccparser:latest can be used 'as-is' as part of a docker-compose or kubernetes deployment.
 
