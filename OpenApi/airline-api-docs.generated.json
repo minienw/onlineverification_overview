@@ -1,346 +1,522 @@
 {
-  "openapi" : "3.0.3",
-  "info" : {
-    "title" : "Airline Stub",
-    "description" : "Airline component of Travel Validation System.",
-    "version" : "2.0",
-    "license" : {
-      "name" : "EUPL 1.2",
-      "url" : "https://spdx.org/licenses/EUPL-1.2.html"
-    }
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Online Verification for Travellers - Airline Stub",
+    "description": "Demonstrator of the airline component of Online Verification for Travellers at https://github.com/minienw/onlineverification_overview.",
+    "termsOfService": "-",
+    "contact": {
+      "name": "Steve Kellaway",
+      "url": "https://www.linkedin.com/in/steve-kellaway-019ba7142/",
+      "email": "steve.kellaway@mefitihe.com"
+    },
+    "license": {
+      "name": "EUPL-1.2",
+      "url": "https://spdx.org/licenses/EUPL-1.2.html"
+    },
+    "version": "0.0.1-SNAPSHOT"
   },
-  "tags" : [ {
-    "name" : "decorator-controller",
-    "description" : "Decorator Controller"
-  }, {
-    "name" : "identity-controller",
-    "description" : "Identity Controller"
-  } ],
-  "paths" : {
-    "/identity" : {
-      "get" : {
-        "tags" : [ "identity-controller" ],
-        "security" : [ ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Identity"
-                }
-              }
-            }
-          },
-          "5XX" : {
-            "description" : "Various server side errors."
-          }
-        }
-      }
+  "servers": [
+    {
+      "url": "http://localhost:9001",
+      "description": "Inferred Url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "decorator-controller",
+      "description": "Decorator Controller"
     },
-    "/callback" : {
-      "post" : {
-        "tags" : [ "decorator-controller" ],
-        "summary" : "validationResultCallback",
-        "operationId" : "validationResultCallbackUsingPOST",
-        "security" : [ {
-          "initiatingToken" : [ ]
-        } ],
-        "parameters" : [ {
-          "name" : "x-version",
-          "in" : "header",
-          "required" : true,
-          "allowReserved" : false,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "2.00" ]
+    {
+      "name": "identity-controller",
+      "description": "Identity Controller"
+    }
+  ],
+  "paths": {
+    "/callback": {
+      "post": {
+        "tags": [
+          "decorator-controller"
+        ],
+        "summary": "Post the initiating token and receive the Validation Access token and encryption parameters.",
+        "operationId": "validationResultCallbackUsingPOST",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
-        } ],
-        "requestBody" : {
-          "description" : "Uses ConfirmationTokenPayload",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CallbackRequestBody"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CallbackRequestBody"
               }
             }
           }
         },
-        "responses" : {
-          "200" : {
-            "description" : "OK"
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentityResponse"
+                }
+              },
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           },
-          "401" : {
-            "description" : "Unauthorized"
+          "400": {
+            "description": "Invalid request body including invalid Response Token signature."
           },
-          "404" : {
-            "description" : "Subject not found"
+          "401": {
+            "description": "Authorization token signature invalid or payload invalid."
           },
-          "5XX" : {
-            "description" : "Various server side errors."
+          "410": {
+            "description": "Subject does not exist."
+          },
+          "500": {
+            "description": "Server Error."
           }
         }
       }
     },
-    "/token" : {
-      "post" : {
-        "tags" : [ "decorator-controller" ],
-        "summary" : "token",
-        "operationId" : "tokenUsingPOST",
-        "security" : [ {
-          "initiatingToken" : [ ]
-        } ],
-        "parameters" : [ {
-          "name" : "x-version",
-          "in" : "header",
-          "required" : true,
-          "allowReserved" : false,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "2.00" ]
+    "/token": {
+      "post": {
+        "tags": [
+          "decorator-controller"
+        ],
+        "summary": "Post the initiating token and receive the Validation Access Token and encryption parameters.",
+        "operationId": "tokenUsingPOST",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/TokenRequestBody"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenRequestBody"
               }
             }
           }
         },
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "headers" : {
-              "x-enc" : {
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Base 64 of UTF8 of JSON of JWK ('#/components/schemas/Jwk') of encryption key (RSA public key) for DCC encryption scheme."
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "x-nonce": {
+                "description": "Length 16 byte array formatted as base 64 string",
+                "required": false,
+                "schema": {
+                  "$ref": "Error-ModelName{namespace='java.lang', name='Void'}"
                 }
               },
-              "x-nonce" : {
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Base 64 of nonce - random byte array, length 16 - ultimately used as an encryption parameter in the DCC encryption scheme."
+              "x-enc": {
+                "description": "An RSA 4096 public key formatted as a JWK -> JSON -> UTF-8 byte array -> base64.",
+                "required": false,
+                "schema": {
+                  "$ref": "Error-ModelName{namespace='java.lang', name='Void'}"
                 }
               },
-              "x-sig" : {
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Base 64 of UTF8 of JSON of JWK ('#/components/schemas/Jwk') of verification key (RSA public key) for DCC encryption scheme."
+              "x-sig": {
+                "description": "A JWK formatted as a JWK -> JSON -> UTF-8 byte array -> base64.",
+                "required": false,
+                "schema": {
+                  "type": "string"
                 }
               }
             },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Validation access token as JWT."
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized"
+          "400": {
+            "description": "Invalid request body.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
           },
-          "5XX" : {
-            "description" : "Various server side errors."
+          "401": {
+            "description": "Authorization token signature invalid or payload invalid."
+          },
+          "410": {
+            "description": "Subject does not exist.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/identity": {
+      "get": {
+        "tags": [
+          "identity-controller"
+        ],
+        "summary": "Get the configuration information about the hosted services.",
+        "operationId": "WholeDocUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentityResponse"
+                }
+              },
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
           }
         }
       }
     }
   },
-  "components" : {
-    "securitySchemes" : {
-      "initiatingToken" : {
-        "type" : "http",
-        "scheme" : "bearer",
-        "bearerFormat" : "JWT",
-        "description" : "See '#/components/schemas/InitiatingQrPayload'"
+  "components": {
+    "schemas": {
+      "CallbackRequestBody": {
+        "title": "CallbackRequestBody",
+        "required": [
+          "confirmationToken"
+        ],
+        "type": "object",
+        "properties": {
+          "confirmationToken": {
+            "type": "string",
+            "description": "JWT with payload ConfirmationTokenPayload"
+          }
+        }
+      },
+      "ConfirmationTokenPayload": {
+        "title": "ConfirmationTokenPayload",
+        "required": [
+          "category",
+          "exp",
+          "iat",
+          "jti",
+          "personalinfodccextract",
+          "poa",
+          "pod",
+          "result",
+          "sub",
+          "validTo",
+          "validationclock",
+          "validfrom"
+        ],
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "array",
+            "description": "e.g. Inter-Flight, Concert, Domestic, MassEvent > 1000, etc. Category which shall be reflected in the validation by additional rules/logic. If null, Standard Business Rule Check will apply. Default: Standard",
+            "example": "Standard",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exp": {
+            "type": "integer",
+            "description": "Time of expiry in Unix epoch time.",
+            "format": "int64"
+          },
+          "iat": {
+            "type": "integer",
+            "description": "Time of issue in Unix epoch time.",
+            "format": "int64"
+          },
+          "jti": {
+            "type": "string",
+            "description": "Unique identifier of the confirmation token - GUID."
+          },
+          "personalinfodccextract": {
+            "$ref": "#/components/schemas/DccExtract"
+          },
+          "poa": {
+            "type": "string",
+            "description": "Port of arrival, TBD Code standard is?"
+          },
+          "pod": {
+            "type": "string",
+            "description": "Port of departure, TBD Code standard is?"
+          },
+          "result": {
+            "type": "string",
+            "description": "Final result of the evaluation.\nOK = Passed\nNOK = Fail\nCHK = Cross Check(OPEN)"
+          },
+          "sub": {
+            "type": "string",
+            "description": "Service provider (airline) identifier for the trip/traveller. GUID formatted as hex (no hyphens)."
+          },
+          "validTo": {
+            "type": "string",
+            "description": "DCC must be valid up to this date. ISO8601 with time and offset e.g. 2021-01-29T12:00:00+01:00."
+          },
+          "validationclock": {
+            "type": "string",
+            "description": "Date where the DCC must be validatable. ISO8601 with time and offset e.g. 2021-01-29T12:00:00+01:00."
+          },
+          "validfrom": {
+            "type": "string",
+            "description": "DCC must be valid from this date. ISO8601 with time and offset e.g. 2021-01-29T12:00:00+01:00."
+          }
+        }
+      },
+      "DccExtract": {
+        "title": "DccExtract",
+        "required": [
+          "dob",
+          "fnt",
+          "gnt"
+        ],
+        "type": "object",
+        "properties": {
+          "dob": {
+            "type": "string",
+            "description": "Date of birth value extracted from DCC e.g. 1979-04-14, 1901-08, 1950 etc."
+          },
+          "fnt": {
+            "type": "string",
+            "description": "Surname value (ICAO 9303 transliterated) extracted from DCC."
+          },
+          "gnt": {
+            "type": "string",
+            "description": "Given name value (ICAO 9303 transliterated) extracted from DCC."
+          }
+        }
+      },
+      "IdentityResponse": {
+        "title": "IdentityResponse",
+        "required": [
+          "id",
+          "service",
+          "verificationMethod"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "service": {
+            "type": "array",
+            "description": "Services available, their endpoints and verification methods.",
+            "items": {
+              "$ref": "#/components/schemas/Service"
+            }
+          },
+          "verificationMethod": {
+            "type": "array",
+            "description": "Verification methods - effectively a list of public keys to check signatures with. However, also contains public RSA encryption keys e.g. for DCC encryption.",
+            "items": {
+              "$ref": "#/components/schemas/VerificationMethod"
+            }
+          }
+        }
+      },
+      "InitiatingQrPayload": {
+        "title": "InitiatingQrPayload",
+        "required": [
+          "consent",
+          "privacyUrl",
+          "protocol",
+          "protocolVersion",
+          "serviceIdentity",
+          "serviceProvider",
+          "subject",
+          "token"
+        ],
+        "type": "object",
+        "properties": {
+          "consent": {
+            "type": "string",
+            "description": "Two items of plain text given the consent text to use in the wallet for 1) at the point of sending a DCC 2) at the point of sending the result back."
+          },
+          "privacyUrl": {
+            "type": "string",
+            "description": "Url hosted by the airline/service provider of a separate privacy statement url with additional data processing information."
+          },
+          "protocol": {
+            "type": "string",
+            "description": "Name of protocol."
+          },
+          "protocolVersion": {
+            "type": "string",
+            "description": "Protocol version - use this value in any required header named 'x-version'."
+          },
+          "serviceIdentity": {
+            "type": "string",
+            "description": "TBD..."
+          },
+          "serviceProvider": {
+            "type": "string",
+            "description": "Plain text of service provider's name."
+          },
+          "subject": {
+            "type": "string",
+            "description": "Plain text of trip identifer e.g. Booking Nr.1234."
+          },
+          "token": {
+            "type": "string",
+            "description": "JWT of InitiatingQrTokenPayload."
+          }
+        }
+      },
+      "PublicKeyJwk": {
+        "title": "PublicKeyJwk",
+        "required": [
+          "alg",
+          "kid",
+          "use",
+          "x5c"
+        ],
+        "type": "object",
+        "properties": {
+          "alg": {
+            "type": "string"
+          },
+          "kid": {
+            "type": "string"
+          },
+          "use": {
+            "type": "string"
+          },
+          "x5c": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Service": {
+        "title": "Service",
+        "required": [
+          "id",
+          "name",
+          "serviceEndpoint",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the Endpoint(must resolve to a Identity Document). All id values have to be prefixed by {serviceproviderurl} and a fragment value, e.g. https://servicepovider/validationservice#AccessCredentialService."
+          },
+          "name": {
+            "type": "string",
+            "description": "'Human-readable' name of service."
+          },
+          "serviceEndpoint": {
+            "type": "string",
+            "description": "Actual URI of endpoint."
+          },
+          "type": {
+            "type": "string",
+            "description": "Value from AccessTokenService, ConfirmationService, ServiceProvider, InitializeService or ValidationService."
+          }
+        }
+      },
+      "TokenRequestBody": {
+        "title": "TokenRequestBody",
+        "required": [
+          "alg",
+          "pubKey"
+        ],
+        "type": "object",
+        "properties": {
+          "alg": {
+            "type": "string",
+            "description": "See ValidationInitializeRequestBody.alg."
+          },
+          "pubKey": {
+            "type": "string",
+            "description": "See ValidationInitializeRequestBody.pubKey."
+          }
+        }
+      },
+      "VerificationMethod": {
+        "title": "VerificationMethod",
+        "required": [
+          "controller",
+          "id",
+          "publicKeyJwk",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "controller": {
+            "type": "string",
+            "description": "..."
+          },
+          "id": {
+            "type": "string",
+            "description": "All ID values must be prefixed by {serviceproviderurl} and a fragment value, e.g. https://serviceprovider/verificationmethod#AccessTokenSigning-1. See documentation."
+          },
+          "publicKeyJwk": {
+            "description": "Public key in JWK format.",
+            "$ref": "#/components/schemas/PublicKeyJwk"
+          },
+          "type": {
+            "type": "string",
+            "description": "Always JsonWebKey2020."
+          }
+        }
       }
     },
-    "schemas" : {
-      "CallbackRequestBody" : {
-        "title" : "CallbackRequestBody",
-        "required" : [ "confirmationToken" ],
-        "type" : "object",
-        "properties" : {
-          "confirmationToken" : {
-            "type" : "string",
-            "description" : "JWT containing ConfirmationTokenPayload."
-          }
-        }
-      },
-      "ConfirmationTokenPayload" : {
-        "title" : "ConfirmationTokenPayload",
-        "required" : [ "category", "exp", "iat", "jti", "personalinfodccextract", "poa", "pod", "result", "sub", "validTo", "validationclock", "validfrom" ],
-        "type" : "object",
-        "properties" : {
-          "category" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "exp" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "iat" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "jti" : {
-            "type" : "string"
-          },
-          "personalinfodccextract" : {
-            "$ref" : "#/components/schemas/DccExtract"
-          },
-          "poa" : {
-            "type" : "string"
-          },
-          "pod" : {
-            "type" : "string"
-          },
-          "result" : {
-            "type" : "string"
-          },
-          "sub" : {
-            "type" : "string"
-          },
-          "validTo" : {
-            "type" : "string"
-          },
-          "validationclock" : {
-            "type" : "string"
-          },
-          "validfrom" : {
-            "type" : "string"
-          }
-        }
-      },
-      "DccExtract" : {
-        "title" : "DccExtract",
-        "type" : "object",
-        "properties" : {
-          "dob" : {
-            "type" : "string"
-          },
-          "fnt" : {
-            "type" : "string"
-          },
-          "gnt" : {
-            "type" : "string"
-          }
-        }
-      },
-      "InitiatingQrPayload" : {
-        "title" : "InitiatingQrPayload",
-        "required" : [ "consent", "privacyUrl", "protocol", "protocolVersion", "serviceIdentity", "serviceProvider", "subject", "token" ],
-        "type" : "object",
-        "properties" : {
-          "consent" : {
-            "type" : "string"
-          },
-          "privacyUrl" : {
-            "type" : "string"
-          },
-          "protocol" : {
-            "type" : "string"
-          },
-          "protocolVersion" : {
-            "type" : "string"
-          },
-          "serviceIdentity" : {
-            "type" : "string"
-          },
-          "serviceProvider" : {
-            "type" : "string"
-          },
-          "subject" : {
-            "type" : "string"
-          },
-          "token" : {
-            "type" : "string"
-          }
-        }
-      },
-      "TokenRequestBody" : {
-        "title" : "TokenRequestBody",
-        "required" : [ "alg", "pubKey" ],
-        "type" : "object",
-        "properties" : {
-          "alg" : {
-            "type" : "string"
-          },
-          "pubKey" : {
-            "type" : "string"
-          }
-        }
-      },
-      "Identity" : {
-        "title" : "Identity",
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "string"
-          },
-          "verificationMethod" : {
-            "type" : "array",
-            "items" : {
-              "type" : "object",
-              "properties" : {
-                "id" : {
-                  "type" : "string"
-                },
-                "type" : {
-                  "type" : "string"
-                },
-                "controller" : {
-                  "type" : "string"
-                },
-                "publicKeyJwk" : {
-                  "type" : "object",
-                  "properties" : {
-                    "x5c" : {
-                      "type" : "array",
-                      "items" : {
-                        "type" : "string"
-                      }
-                    },
-                    "kid" : {
-                      "type" : "string"
-                    },
-                    "alg" : {
-                      "type" : "string"
-                    },
-                    "use" : {
-                      "type" : "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "service" : {
-            "type" : "array",
-            "items" : {
-              "type" : "object",
-              "properties" : {
-                "id" : {
-                  "type" : "string"
-                },
-                "type" : {
-                  "type" : "string"
-                },
-                "serviceEndpoint" : {
-                  "type" : "string"
-                }
-              }
-            }
-          }
-        }
+    "securitySchemes": {
+      "InitiatingTokenJwt": {
+        "type": "http",
+        "description": "Value is signed JWT of InitiatingQrToken",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
