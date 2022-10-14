@@ -1,6 +1,6 @@
 # Guides and Specifications for Online Verification for Travellers
 
-The original overview document can be found at Validation Service Spec 1.2 NL Flavour Rev. 4 (1).docx in this repo.
+The original overview document can be found at https://github.com/minienw/onlineverification_overview/blob/main/Validation%20Service%20Spec%201.2%20NL%20Flavour%20Rev.%204%20(1).docx in this repo.
 
 This repo describes the Online Verification for Travellers system which consits of 3 co-operating components. 
 
