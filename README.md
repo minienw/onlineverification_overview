@@ -1,6 +1,6 @@
 # Guides and Specifications for Online Verification for Travellers
 
-The original overview document can be found at https://docs.google.com/document/d/1BW-Bn9nf0mtCa8p36nbxt3GYuhy6xuBaG8lIDxi-aNs.
+The original overview document can be found at Validation Service Spec 1.2 NL Flavour Rev. 4 (1).docx in this repo.
 
 This repo describes the Online Verification for Travellers system which consits of 3 co-operating components. 
 
